@@ -1,15 +1,31 @@
-terraform-validate:
+name: Terraform Validation
+ 
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+ 
+jobs:
+  terraform-validate:
+    name: Validate Terraform
     runs-on: ubuntu-latest
-    name: Terraform Validate
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 1
-      - name: Configure Terraform
+      - name: Checkout repository
+        uses: actions/checkout@v4
+ 
+      - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: 1.2.4
-      - name: Terraform Init
+          terraform_version: 1.10.5 # Change this to your Terraform version
+ 
+      - name: Initialize Terraform
         run: terraform init
-      - name: Terraform Validate
+ 
+      - name: Validate Terraform configuration
         run: terraform validate
+ 
+      - name: Check Terraform formatting
+        run: terraform fmt -check
